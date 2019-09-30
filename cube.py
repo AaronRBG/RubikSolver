@@ -30,8 +30,8 @@ class Cube:
 
 		dict_faces = {0: 'UP', 1: 'DOWN', 2: 'FRONT', 3: 'BACK', 4: 'LEFT', 5: 'RIGHT'}
 
-		if(movement[0]=="L"):
-			aux = [ 0 for a in range(length) ]
+		if(movement[0] == "L"):
+			aux = [0 for a in range(length)]
 
 			for i in range(length):
 				aux[i] = self.faces[dict_faces[3]][i][layer]
@@ -44,9 +44,35 @@ class Cube:
 
 				self.faces[dict_faces[0]][length-1-i][inv] = aux[i]
 
-
+			if layer == 0:
+				a = 0
+				b = 0
+				face = self.faces[dict_faces[4]]
+				j = 0
+				while j >= 0:
+					i = length - 1
+					while i < length:
+						self.faces[dict_faces[4][a][b]] = face[i][j]
+						i = i - 1
+						b = b + 1
+					j = j + 1
+					a = a + 1
+			elif layer == length - 1:
+				a = 0
+				b = 0
+				face = self.faces[dict_faces[5]]
+				j = 0
+				while j >= 0:
+					i = length - 1
+					while i < length:
+						self.faces[dict_faces[5][a][b]] = face[i][j]
+						i = i - 1
+						b = b + 1
+					j = j + 1
+					a = a + 1
+	
 		if(movement[0]=="l"):
-			aux = [ 0 for a in range(length)]
+			aux = [0 for a in range(length)]
 
 			for i in range(length):
 				aux[i] = self.faces[dict_faces[2]][i][layer]
@@ -59,8 +85,35 @@ class Cube:
 
 				self.faces[dict_faces[0]][length-1-i][inv] = aux[i]
 
+			if layer == 0:
+				a = 0
+				b = 0
+				face = self.faces[dict_faces[4]]
+				i = 0
+				j = length - 1
+				while j >= 0:
+					while i < length:
+						self.faces[dict_faces[4][a][b]] = face[i][j]
+						i = i + 1
+						b = b + 1
+					j = j - 1
+					a = a + 1
+			elif layer == length - 1:
+				a = 0
+				b = 0
+				face = self.faces[dict_faces[5]]
+				i = 0
+				j = length - 1
+				while j >= 0:
+					while i < length:
+						self.faces[dict_faces[5][a][b]] = face[i][j]
+						i = i + 1
+						b = b + 1
+					j = j - 1
+					a = a + 1
+			
 		if(movement[0]=="D"):
-			aux = [ 0 for a in range(length)]
+			aux = [0 for a in range(length)]
 
 			for i in range(length):
 				aux[i] = self.faces[dict_faces[3]][layer][length-1-i]
@@ -69,6 +122,33 @@ class Cube:
 				self.faces[dict_faces[4]][i][inv] = self.faces[dict_faces[2]][layer][i]
 				self.faces[dict_faces[2]][layer][i] = self.faces[dict_faces[5]][length-1-i][layer]
 				self.faces[dict_faces[5]][length-1-i][layer] = aux[i]
+
+			if layer == 0:
+				a = 0
+				b = 0
+				face = self.faces[dict_faces[1]]
+				j = 0
+				while j >= 0:
+					i = length - 1
+					while i < length:
+						self.faces[dict_faces[1][a][b]] = face[i][j]
+						i = i - 1
+						b = b + 1
+					j = j + 1
+					a = a + 1
+			elif layer == length - 1:
+				a = 0
+				b = 0
+				face = self.faces[dict_faces[0]]
+				j = 0
+				while j >= 0:
+					i = length - 1
+					while i < length:
+						self.faces[dict_faces[0][a][b]] = face[i][j]
+						i = i - 1
+						b = b + 1
+					j = j + 1
+					a = a + 1
 
 		if(movement[0]=="d"):
 			aux = [ 0 for a in range(length)]
@@ -81,6 +161,33 @@ class Cube:
 				self.faces[dict_faces[2]][layer][i] = self.faces[dict_faces[4]][i][inv]
 				self.faces[dict_faces[4]][i][inv] = aux[i]
 
+			if layer == 0:
+				a = 0
+				b = 0
+				face = self.faces[dict_faces[0]]
+				i = 0
+				j = length - 1
+				while j >= 0:
+					while i < length:
+						self.faces[dict_faces[1][a][b]] = face[i][j]
+						i = i + 1
+						b = b + 1
+					j = j - 1
+					a = a + 1
+			elif layer == length - 1:
+				a = 0
+				b = 0
+				face = self.faces[dict_faces[0]]
+				i = 0
+				j = length - 1
+				while j >= 0:
+					while i < length:
+						self.faces[dict_faces[0][a][b]] = face[i][j]
+						i = i + 1
+						b = b + 1
+					j = j - 1
+					a = a + 1
+
 		if(movement[0]=="B"):
 			aux = [ 0 for a in range(length)]
 
@@ -91,6 +198,33 @@ class Cube:
 				self.faces[dict_faces[1]][layer][i] = self.faces[dict_faces[4]][layer][i]
 				self.faces[dict_faces[4]][layer][i] = self.faces[dict_faces[0]][layer][i]
 				self.faces[dict_faces[0]][layer][i] = aux[i]
+			
+			if layer == 0:
+				a = 0
+				b = 0
+				face = self.faces[dict_faces[3]]
+				j = 0
+				while j >= 0:
+					i = length - 1
+					while i < length:
+						self.faces[dict_faces[3][a][b]] = face[i][j]
+						i = i - 1
+						b = b + 1
+					j = j + 1
+					a = a + 1
+			elif layer == length - 1:
+				a = 0
+				b = 0
+				face = self.faces[dict_faces[2]]
+				j = 0
+				while j >= 0:
+					i = length - 1
+					while i < length:
+						self.faces[dict_faces[2][a][b]] = face[i][j]
+						i = i - 1
+						b = b + 1
+					j = j + 1
+					a = a + 1
 
 		if(movement[0]=="b"):
 			aux = [ 0 for a in range(length)]
@@ -102,6 +236,33 @@ class Cube:
 				self.faces[dict_faces[1]][layer][i] = self.faces[dict_faces[5]][layer][i]
 				self.faces[dict_faces[5]][layer][i] = self.faces[dict_faces[0]][layer][i]
 				self.faces[dict_faces[0]][layer][i] = aux[i]
+
+			if layer == 0:
+				a = 0
+				b = 0
+				face = self.faces[dict_faces[3]]
+				i = 0
+				j = length - 1
+				while j >= 0:
+					while i < length:
+						self.faces[dict_faces[3][a][b]] = face[i][j]
+						i = i + 1
+						b = b + 1
+					j = j - 1
+					a = a + 1
+			elif layer == length - 1:
+				a = 0
+				b = 0
+				face = self.faces[dict_faces[2]]
+				i = 0
+				j = length - 1
+				while j >= 0:
+					while i < length:
+						self.faces[dict_faces[2][a][b]] = face[i][j]
+						i = i + 1
+						b = b + 1
+					j = j - 1
+					a = a + 1
 
 	def printState(self):
 
