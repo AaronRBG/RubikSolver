@@ -7,8 +7,9 @@ class Cube:
     def __init__(self, id, faces):  # constructor
         self.id = id
         self.faces = faces
-        self.dict_colours = {0: 'white', 1: 'yellow', 2: 'red', 3: 'orange', 4: 'blue', 5: 'green'}
+        self.dict_colours = {0: 'white', 1: 'yellow', 2: 'red', 3: 'orange', 4:'blue', 5: 'green'}
         self.dict_faces = {0: 'UP', 1: 'DOWN', 2: 'FRONT', 3: 'BACK', 4: 'LEFT', 5: 'RIGHT'}
+        self.movements = 0
 
     def setID(self,id):
         self.id=id
@@ -20,14 +21,14 @@ class Cube:
         aux = ""
 
         for i in range(n):
-            aux += "L" + str(i) + ",";
-            aux += "l" + str(i) + ",";
-            aux += "D" + str(i) + ",";
-            aux += "d" + str(i) + ",";
-            aux += "B" + str(i) + ",";
-            aux += "b" + str(i) + ",";
+            aux += "L" + str(i) + ","
+            aux += "l" + str(i) + ","
+            aux += "D" + str(i) + ","
+            aux += "d" + str(i) + ","
+            aux += "B" + str(i) + ","
+            aux += "b" + str(i) + ","
 
-        return aux;
+        return aux
 
     def moveL(self, layer, inv, aux, length):
 
@@ -87,19 +88,31 @@ class Cube:
 
         if (mov == "L"):
             self.moveL(layer, inv, aux, length)
+            self.movements += 1
+            cube2Json(self, "move"+str(self.movements)+".json")
         if (mov == 'l'):
             for i in range(3):
                 self.moveL(layer, inv, aux, length)
+            self.movements += 1
+            cube2Json(self, "move"+str(self.movements)+".json")
         if (mov == "D"):
             self.moveD(layer, inv, aux, length)
+            self.movements += 1
+            cube2Json(self, "move"+str(self.movements)+".json")
         if (mov == 'd'):
             for i in range(3):
                 self.moveD(layer, inv, aux, length)
+            self.movements += 1
+            cube2Json(self, "move"+str(self.movements)+".json")
         if (mov == "B"):
             self.moveB(layer, inv, aux, length)
+            self.movements += 1
+            cube2Json(self, "move"+str(self.movements)+".json")
         if (mov == 'b'):
             for i in range(3):
                 self.moveB(layer, inv, aux, length)
+            self.movements += 1
+            cube2Json(self, "move"+str(self.movements)+".json")
 
     def printState(self):   #This method prints a specific state of the cube
 
@@ -188,7 +201,7 @@ class Cube:
 
     def cubeMD5(self):  #This  method creates an specific MD5 identifier from the string of the previous method
         md = self.cubeString()
-        result =  hashlib.md5(md.encode())
+        result = hashlib.md5(md.encode())
         return result.hexdigest()
 
 # END of Class Cube
@@ -219,9 +232,9 @@ def cube2Json(c, filename): #This method creates a json file from a cube object
 
 # Main
 
-c = json2cube('cube5x5.txt')
+c = json2cube('cube5x5.json')
 print(c.generateMoves())
 c.printState()
 c.move("B3")
 c.printState()
-cube2json(c,"final_cube")
+cube2Json(c,"final_cube")
