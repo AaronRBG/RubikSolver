@@ -1,179 +1,200 @@
-import turtle,json
+import hashlib
+import turtle, json
+
 
 class Cube:
 
-	def __init__(self,id,faces):	#constructor
-		self.id = id
-		self.faces = faces
-		self.dict_colours = {0: 'white', 1: 'yellow', 2: 'red', 3: 'orange', 4: 'blue', 5: 'green'}
-		self.dict_faces = {0: 'UP', 1: 'DOWN', 2: 'FRONT', 3: 'BACK', 4: 'LEFT', 5: 'RIGHT'}
+    def __init__(self, id, faces):  # constructor
+        self.id = id
+        self.faces = faces
+        self.dict_colours = {0: 'white', 1: 'yellow', 2: 'red', 3: 'orange', 4: 'blue', 5: 'green'}
+        self.dict_faces = {0: 'UP', 1: 'DOWN', 2: 'FRONT', 3: 'BACK', 4: 'LEFT', 5: 'RIGHT'}
 
-	def generateMoves(self):	#this method computes the valid moves for the cube
-		
-		n = len(self.faces["UP"])	#here we get the dimension of the cube NxNxN
+    def setID(self,id):
+        self.id=id
 
-		aux=""
+    def generateMoves(self):  # this method computes the valid moves for the cube
 
-		for i in range(n):
-			aux+="L" + str(i) + "," ;
-			aux+="l" + str(i) + "," ;
-			aux+="D" + str(i) + "," ;
-			aux+="d" + str(i) + "," ;
-			aux+="B" + str(i) + "," ;
-			aux+="b" + str(i) + "," ;
+        n = len(self.faces["UP"])  # here we get the dimension of the cube NxNxN
 
-		return aux;	
+        aux = ""
 
-	def moveL(self,layer,inv,aux,length):
+        for i in range(n):
+            aux += "L" + str(i) + ",";
+            aux += "l" + str(i) + ",";
+            aux += "D" + str(i) + ",";
+            aux += "d" + str(i) + ",";
+            aux += "B" + str(i) + ",";
+            aux += "b" + str(i) + ",";
 
-		if(layer==0):
-			self.turnRight(4)
-		if(layer==length-1):
-			self.turnRight(5)
+        return aux;
 
-		for i in range(length):
-			aux[i] = self.faces[self.dict_faces[3]][i][layer]	#store the layer
+    def moveL(self, layer, inv, aux, length):
 
-			self.faces[self.dict_faces[3]][i][layer] = self.faces[self.dict_faces[1]][i][layer]
-			self.faces[self.dict_faces[1]][i][layer] = self.faces[self.dict_faces[2]][i][layer]
-			self.faces[self.dict_faces[2]][i][layer] = self.faces[self.dict_faces[0]][length-1-i][inv]
+        if (layer == 0):
+            self.turnRight(4)
+        if (layer == length - 1):
+            self.turnRight(5)
 
-		for i in range(length):
-			self.faces[self.dict_faces[0]][length-1-i][inv] = aux[i]
+        for i in range(length):
+            aux[i] = self.faces[self.dict_faces[3]][i][layer]  # store the layer
 
-	def moveD(self,layer,inv,aux,length):
+            self.faces[self.dict_faces[3]][i][layer] = self.faces[self.dict_faces[1]][i][layer]
+            self.faces[self.dict_faces[1]][i][layer] = self.faces[self.dict_faces[2]][i][layer]
+            self.faces[self.dict_faces[2]][i][layer] = self.faces[self.dict_faces[0]][length - 1 - i][inv]
 
-		if(layer==0):
-			self.turnRight(1)
-		if(layer==length-1):
-			self.turnRight(0)
+        for i in range(length):
+            self.faces[self.dict_faces[0]][length - 1 - i][inv] = aux[i]
 
-		for i in range(length):
-			aux[i] = self.faces[self.dict_faces[3]][layer][length-1-i]
+    def moveD(self, layer, inv, aux, length):
 
-			self.faces[self.dict_faces[3]][layer][length-1-i] = self.faces[self.dict_faces[4]][length-1-i][inv]
-			self.faces[self.dict_faces[4]][length-1-i][inv] = self.faces[self.dict_faces[2]][layer][i]
-			self.faces[self.dict_faces[2]][layer][i] = self.faces[self.dict_faces[5]][i][layer]
-		for i in range(length):	
-			self.faces[self.dict_faces[5]][i][layer] = aux[length-1-i]
+        if (layer == 0):
+            self.turnRight(1)
+        if (layer == length - 1):
+            self.turnRight(0)
 
+        for i in range(length):
+            aux[i] = self.faces[self.dict_faces[3]][layer][length - 1 - i]
 
-	def moveB(self,layer,inv,aux,length):
+            self.faces[self.dict_faces[3]][layer][length - 1 - i] = self.faces[self.dict_faces[4]][length - 1 - i][inv]
+            self.faces[self.dict_faces[4]][length - 1 - i][inv] = self.faces[self.dict_faces[2]][layer][i]
+            self.faces[self.dict_faces[2]][layer][i] = self.faces[self.dict_faces[5]][i][layer]
+        for i in range(length):
+            self.faces[self.dict_faces[5]][i][layer] = aux[length - 1 - i]
 
-		if(layer==0):
-			self.turnRight(3)
-		if(layer==length-1):
-			self.turnRight(2)
+    def moveB(self, layer, inv, aux, length):
 
-		for i in range(length):
-			aux[i] = self.faces[self.dict_faces[5]][layer][i]
+        if (layer == 0):
+            self.turnRight(3)
+        if (layer == length - 1):
+            self.turnRight(2)
 
-			self.faces[self.dict_faces[5]][layer][i] = self.faces[self.dict_faces[1]][layer][i]
-			self.faces[self.dict_faces[1]][layer][i] = self.faces[self.dict_faces[4]][layer][i]
-			self.faces[self.dict_faces[4]][layer][i] = self.faces[self.dict_faces[0]][layer][i]
-			self.faces[self.dict_faces[0]][layer][i] = aux[i]
+        for i in range(length):
+            aux[i] = self.faces[self.dict_faces[5]][layer][i]
 
-	def move(self,movement):	#this method performs the selected move on the cube
+            self.faces[self.dict_faces[5]][layer][i] = self.faces[self.dict_faces[1]][layer][i]
+            self.faces[self.dict_faces[1]][layer][i] = self.faces[self.dict_faces[4]][layer][i]
+            self.faces[self.dict_faces[4]][layer][i] = self.faces[self.dict_faces[0]][layer][i]
+            self.faces[self.dict_faces[0]][layer][i] = aux[i]
 
-		length = len(self.faces["UP"])	#here we get the dimension of the cube NxNxN
-		layer = int(movement[1])		#here we get the layer where the move is performed
-		mov = movement[0]				#here we get the type of movement. Example L0 layer is 0, mov = L
-		inv = length -1 -layer			#here we get the inverse layer of the selected layer (useful for some movements)	
-		aux = [ 0 for a in range(length) ]	#we create an auxiliaty array to store a row/column of a face
+    def move(self, movement):  # this method performs the selected move on the cube
 
-		if(mov=="L"):
-			self.moveL(layer,inv,aux,length)
-		if(mov=='l'):
-			for i in range(length):
-				self.moveL(layer,inv,aux,length)
-		if(mov=="D"):
-			self.moveD(layer,inv,aux,length)
-		if(mov=='d'):
-			for i in range(length):
-				self.moveD(layer,inv,aux,length)
-		if(mov=="B"):
-			self.moveB(layer,inv,aux,length)
-		if(mov=='b'):
-			for i in range(length):
-				self.moveB(layer,inv,aux,length)
+        length = len(self.faces["UP"])  # here we get the dimension of the cube NxNxN
+        layer = int(movement[1])  # here we get the layer where the move is performed
+        mov = movement[0]  # here we get the type of movement. Example L0 layer is 0, mov = L
+        inv = length - 1 - layer  # here we get the inverse layer of the selected layer (useful for some movements)
+        aux = [0 for a in range(length)]  # we create an auxiliaty array to store a row/column of a face
 
-	def printState(self):
+        if (mov == "L"):
+            self.moveL(layer, inv, aux, length)
+        if (mov == 'l'):
+            for i in range(3):
+                self.moveL(layer, inv, aux, length)
+        if (mov == "D"):
+            self.moveD(layer, inv, aux, length)
+        if (mov == 'd'):
+            for i in range(3):
+                self.moveD(layer, inv, aux, length)
+        if (mov == "B"):
+            self.moveB(layer, inv, aux, length)
+        if (mov == 'b'):
+            for i in range(3):
+                self.moveB(layer, inv, aux, length)
 
-		turtle.hideturtle()
-		turtle.tracer(False)
-		turtle.speed(0)
+    def printState(self):   #This method prints a specific state of the cube
 
-		t = turtle.Turtle()
+        turtle.hideturtle()
+        turtle.tracer(False)
+        turtle.speed(0)
 
-		x=0
-		y=0
-		n = 3
+        t = turtle.Turtle()
 
-		for l in range(6):   	# make the 6 faces
+        x = 0
+        y = 0
+        n = len(self.faces["UP"])
 
-			if(l<2 or l > 3):
-				y=0
-				if(l==0):
-					x=0
-				elif(l==1):
-					x=(-30-30*n)*2
-				elif(l==4):
-					x=(-30-30*n)*3
-				else:
-					x=-30-30*n
-			else:
-				x=(-30-30*n)*2
-				if(l==2):
-					y=-30-30*n
-				else:
-					y=30+30*n
+        for l in range(6):  # make the 6 faces
 
-			for k in range(n):	# make a cube face
+            if (l < 2 or l > 3):
+                y = 0
+                if (l == 0):
+                    x = 0
+                elif (l == 1):
+                    x = (-30 - 30 * n) * 2
+                elif (l == 4):
+                    x = (-30 - 30 * n) * 3
+                else:
+                    x = -30 - 30 * n
+            else:
+                x = (-30 - 30 * n) * 2
+                if (l == 2):
+                    y = -30 - 30 * n
+                else:
+                    y = 30 + 30 * n
 
-				for j in range(n):	# make a row of 3 squares
+            for k in range(n):  # make a cube face
 
-					t.penup()
-					t.goto(x,y)
-					t.pendown()
-					face = self.faces[self.dict_faces[l]]
-					t.begin_fill()
-					t.fillcolor(self.dict_colours[face[k][j]])	# here we would have to take the color from the matrix
+                for j in range(n):  # make a row of N squares
 
-					for i in range(4):	# make a square
-						t.forward(30)
-						t.right(90)
+                    t.penup()
+                    t.goto(x, y)
+                    t.pendown()
+                    face = self.faces[self.dict_faces[l]]
+                    t.begin_fill()
+                    t.fillcolor(self.dict_colours[face[k][j]])  # here we would have to take the color from the matrix
 
-					t.end_fill()
+                    for i in range(4):  # make a square
+                        t.forward(30)
+                        t.right(90)
 
-					x+=30
+                    t.end_fill()
 
-				x-=30*n	
-				y-=30
-			
-		t.penup()
-		t.goto(1000,1000)
-		#turtle.getscreen()._root.mainloop()
-		input()
+                    x += 30
 
-	def turnRight(self,index):
+                x -= 30 * n
+                y -= 30
 
-		matrix = self.faces[self.dict_faces[index]]
+        t.penup()
+        t.goto(1000, 1000)
+        print("Press ENTER to continue.")
+        input()
 
-		res = [ [ 0 for i in range(len(matrix))] for j in range(len(matrix[0]))]
-		aux = [0,0,0]
+    def turnRight(self, index): #This is an internal method that allows us to rotate a face of the cube 90 degrees to the right
 
-		for i in range(len(matrix)):
-			for j in range(len(matrix[0])):
-				aux[j] = matrix[i][j]
+        matrix = self.faces[self.dict_faces[index]]
 
-			for j in range(len(matrix)):
-				res[j][len(matrix)-1-i]=aux[j]
+        res = [[0 for i in range(len(matrix))] for j in range(len(matrix[0]))]
+        aux = [0 for i in range(len(matrix))]
 
-		for i in range(len(matrix)):
-			for j in range(len(matrix)):
-				self.faces[self.dict_faces[index]][i][j]=res[i][j]
+        for i in range(len(matrix)):
+            for j in range(len(matrix[0])):
+                aux[j] = matrix[i][j]
 
-def json2cube(filename):
+            for j in range(len(matrix)):
+                res[j][len(matrix) - 1 - i] = aux[j]
+
+        for i in range(len(matrix)):
+            for j in range(len(matrix)):
+                self.faces[self.dict_faces[index]][i][j] = res[i][j]
+
+    def cubeString(self):   #This method creates a String from the cube state
+        message = ""
+        for i in range(6):
+            for j in range(len(self.faces["UP"])):
+                for k in range(len(self.faces["UP"])):
+                   message+=str(self.faces[self.dict_faces[i]][j][k])
+
+        return message
+
+    def cubeMD5(self):  #This  method creates an specific MD5 identifier from the string of the previous method
+        md = self.cubeString()
+        result =  hashlib.md5(md.encode())
+        return result.hexdigest()
+
+# END of Class Cube
+# MAIN Methods
+
+def json2cube(filename):    #This method creates a cube object from a json file
     input_file = open(filename)
     json_array = json.load(input_file)
 
@@ -187,13 +208,20 @@ def json2cube(filename):
         store_details['RIGHT'] = item['RIGHT']
 
     cubo = Cube("id", store_details)
+    cubo.setID(cubo.cubeMD5())
 
     return cubo
 
 
-def cube2Json(c, filename):
+def cube2Json(c, filename): #This method creates a json file from a cube object
     with open(filename, 'w') as outfile:
         json.dump([c.faces], outfile)
 
-c = json2cube('cube.txt')
+# Main
 
+c = json2cube('cube5x5.txt')
+print(c.generateMoves())
+c.printState()
+c.move("B3")
+c.printState()
+cube2json(c,"final_cube")
