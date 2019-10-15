@@ -183,10 +183,24 @@ class Cube:
 
     def cubeString(self):   #This method creates a String from the cube state
         message = ""
-        for i in range(6):
-            for j in range(len(self.faces["UP"])):
-                for k in range(len(self.faces["UP"])):
-                   message+=str(self.faces[self.dict_faces[i]][j][k])
+        for j in range(len(self.faces["UP"])):
+            for k in range(len(self.faces["UP"])):
+                message+=str(self.faces[self.dict_faces[3]][j][k])
+        for j in range(len(self.faces["UP"])):
+            for k in range(len(self.faces["UP"])):
+                message+=str(self.faces[self.dict_faces[1]][j][k])
+        for j in range(len(self.faces["UP"])):
+            for k in range(len(self.faces["UP"])):
+                message+=str(self.faces[self.dict_faces[2]][j][k])
+        for j in range(len(self.faces["UP"])):
+            for k in range(len(self.faces["UP"])):
+                message+=str(self.faces[self.dict_faces[4]][j][k])
+        for j in range(len(self.faces["UP"])):
+            for k in range(len(self.faces["UP"])):
+                message+=str(self.faces[self.dict_faces[5]][j][k])
+        for j in range(len(self.faces["UP"])):
+            for k in range(len(self.faces["UP"])):
+                message+=str(self.faces[self.dict_faces[0]][j][k])
 
         return message
 
