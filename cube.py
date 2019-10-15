@@ -13,21 +13,31 @@ class Cube:
     def setID(self,id):
         self.id=id
 
+    def setFaces(self,faces):
+        self.faces=faces
+
     def generateMoves(self):  # this method computes the valid moves for the cube
 
         n = len(self.faces["UP"])  # here we get the dimension of the cube NxNxN
 
+        ret = ()
         aux = ""
 
         for i in range(n):
-            aux += "L" + str(i) + ",";
-            aux += "l" + str(i) + ",";
-            aux += "D" + str(i) + ",";
-            aux += "d" + str(i) + ",";
-            aux += "B" + str(i) + ",";
-            aux += "b" + str(i) + ",";
+            aux = "L" + str(i)
+            ret += (aux,)
+            aux = "l" + str(i)
+            ret += (aux,)
+            aux = "D" + str(i)
+            ret += (aux,)
+            aux = "d" + str(i)
+            ret += (aux,)
+            aux = "B" + str(i)
+            ret += (aux,)
+            aux = "b" + str(i)
+            ret += (aux,)
 
-        return aux;
+        return ret;
 
     def moveL(self, layer, inv, aux, length):
 
@@ -213,22 +223,18 @@ class Cube:
         with open(filename, 'w') as outfile:
             json.dump([self.faces], outfile)
 
-# END of Class Cube
+    def json2cube(self,filename):    #This method creates a cube object from a json file
+        input_file = open(filename)
+        json_array = json.load(input_file)
 
-def json2cube(filename):    #This method creates a cube object from a json file
-    input_file = open(filename)
-    json_array = json.load(input_file)
+        for item in json_array:
+            store_details = {"UP": None, "DOWN": None, "FRONT": None, "BACK": None, "LEFT": None, "RIGHT": None}
+            store_details['UP'] = item['UP']
+            store_details['DOWN'] = item['DOWN']
+            store_details['FRONT'] = item['FRONT']
+            store_details['BACK'] = item['BACK']
+            store_details['LEFT'] = item['LEFT']
+            store_details['RIGHT'] = item['RIGHT']
 
-    for item in json_array:
-        store_details = {"UP": None, "DOWN": None, "FRONT": None, "BACK": None, "LEFT": None, "RIGHT": None}
-        store_details['UP'] = item['UP']
-        store_details['DOWN'] = item['DOWN']
-        store_details['FRONT'] = item['FRONT']
-        store_details['BACK'] = item['BACK']
-        store_details['LEFT'] = item['LEFT']
-        store_details['RIGHT'] = item['RIGHT']
-
-    cubo = Cube("id", store_details)
-    cubo.cubeMD5()
-
-    return cubo
+        self.setFaces(store_details)
+        self.cubeMD5()
