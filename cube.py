@@ -218,10 +218,3 @@ def json2cube(filename):    #This method creates a cube object from a json file
     cubo.cubeMD5()
 
     return cubo
-
-# Main
-
-c = json2cube('cube.json')
-print(c.generateMoves())
-c.printState()
-c.move("L0")
