@@ -1,6 +1,7 @@
-import cube
+from cube import Cube
 
-c = cube.json2cube('cube3x3.json')
-print(c.generateMoves())
+c = Cube(None,None)
+c.json2cube('cubeExample.json')
 c.printState()
-c.move("L0")
+c.move("l0")
+c.printState()

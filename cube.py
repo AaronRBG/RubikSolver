@@ -1,7 +1,6 @@
 import hashlib
 import turtle, json
 
-
 class Cube:
 
     def __init__(self, id, faces):  # constructor
@@ -45,6 +44,8 @@ class Cube:
             self.turnRight(4)
         if (layer == length - 1):
             self.turnRight(5)
+            self.turnRight(5)
+            self.turnRight(5)
 
         for i in range(length):
             aux[i] = self.faces[self.dict_faces[3]][i][layer]  # store the layer
@@ -62,6 +63,8 @@ class Cube:
             self.turnRight(1)
         if (layer == length - 1):
             self.turnRight(0)
+            self.turnRight(0)
+            self.turnRight(0)
 
         for i in range(length):
             aux[i] = self.faces[self.dict_faces[3]][layer][length - 1 - i]
@@ -77,6 +80,8 @@ class Cube:
         if (layer == 0):
             self.turnRight(3)
         if (layer == length - 1):
+            self.turnRight(2)
+            self.turnRight(2)
             self.turnRight(2)
 
         for i in range(length):
@@ -110,7 +115,6 @@ class Cube:
         if (mov == 'b'):
             for i in range(3):
                 self.moveB(layer, inv, aux, length)
-        self.printState()
         self.cubeMD5()
         filename = "" + self.id + "-" + movement + ".json"
         self.cube2Json(filename)
