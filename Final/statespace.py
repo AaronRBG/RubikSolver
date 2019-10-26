@@ -1,32 +1,25 @@
-from treenode import Treenode
-from cube import Cube
-import random
+import cube
 
-def sucessors(node):
+def successors(stateJSON):
 
-	state = node.state
-	c = Cube(None,None)
+	ret = []
 
-	ret = [ None for i in range(12)]
-
-	state.cube2Json("state.json")
-	c.json2cube("state.json")
-
-	for i in range(12):
-		ret[i] = Treenode(1,c,node.cost+1,"",node.d+1,random.randint(1,101),c)
-
+	cube = Cube()
+	cube.json2cube(stateJSON)
+	
 	moves = iter(state.generateMoves())
 
 	for i in range(12):
 
 		movement = next(moves)
-		ret[i].state.move(movement)
+		new_cube = cube
+		new_cube.move(movement)
+		succesor = (movement, new_cube, 1)
+		print(successor)
+		ret.append(succesor)
 
 	return ret
 
 print('Introduce a json filename')
 filename = input()
-c = Cube(None,None)
-c.json2cube(filename)
-t = Treenode(1, c, 1, "", 1, random.randint(1,101), parent=None)
-print(sucessors(t))
+sucessors(filename)
