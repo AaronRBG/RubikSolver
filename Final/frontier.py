@@ -3,7 +3,7 @@ class Frontier:
     def __init__(self):
         self.frontier = []
 
-    def insert(self, treeNode):
+    def insertNode(self, treeNode):
         if len(self.frontier) == 0:
             self.frontier.append(treeNode)
         else:
@@ -16,7 +16,7 @@ class Frontier:
             if count < 0:
                 self.frontier.insert(0, treeNode)
 
-    def remove(self): #Remove node from the frontier
+    def removeNode(self): #Remove node from the frontier
         if self.frontier:
             treeNode = self.frontier.pop(0)
             return treeNode
