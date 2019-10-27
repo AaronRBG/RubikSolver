@@ -3,7 +3,8 @@ class Frontier:
     def __init__(self):
         self.frontier = []
 
-    def insertNode(self, treeNode):
+    def insertNode(self, treeNode): #Insert a node in the correct position, maintaining the ascending order
+                                    #of f value
         if len(self.frontier) == 0:
             self.frontier.append(treeNode)
         else:
