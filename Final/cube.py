@@ -3,7 +3,7 @@ import turtle, json
 
 class Cube:
 
-    def __init__(self, id, faces):  # constructor
+    def __init__(self, id = None, faces = None):  # constructor
         self.id = id
         self.faces = faces
         self.dict_colours = {0: 'white', 1: 'yellow', 2: 'red', 3: 'orange', 4: 'blue', 5: 'green'}
