@@ -17,7 +17,7 @@ class Frontier:
             if count < 0:
                 self.frontier.insert(0, treeNode)
 
-    def removeNode(self): #Remove node from the frontier
+    def removeNode(self): #Remove first node from the frontier
         if self.frontier:
             treeNode = self.frontier.pop(0)
             return treeNode
@@ -29,3 +29,8 @@ class Frontier:
             return True
         else:
             return False
+
+    def insertList(self, listNodes): #Insert a node in the correct position, maintaining the ascending order
+                                    #of f value
+        for each node in listNodes:
+            self.insertNode(node)
