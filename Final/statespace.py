@@ -1,24 +1,25 @@
 from cube import Cube
 
-def successors(stateJSON):
+def sucessors(state):
 
-	ret = []
+	ret = [ Cube() for i in range(12)]
 
-	cube = Cube()
-	cube.json2cube(stateJSON)
-	
-	moves = iter(cube.generateMoves())
+	state.cube2Json("saved/"+"state.json")
+
+	for i in range(12):
+		ret[i].json2cube("saved/"+"state.json")
+
+	moves = iter(state.generateMoves())
 
 	for i in range(12):
 
 		movement = next(moves)
-		new_cube = cube
-		new_cube.move(movement)
-		successor = (movement, new_cube, 1)
-		ret.append(successor)
+		ret[i].move(movement)
 
 	return ret
 
 print('Introduce a json filename')
 filename = input()
-print(successors(filename))
+c = Cube()
+c.json2cube(filename)
+print(sucessors(c))

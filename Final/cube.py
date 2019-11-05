@@ -3,7 +3,7 @@ import turtle, json
 
 class Cube:
 
-    def __init__(self, id, faces):  # constructor
+    def __init__(self, id="", faces=None):  # constructor
         self.id = id
         self.faces = faces
         his = {0: 'red', 1: 'blue', 2: 'yellow', 3: 'green', 4: 'orange', 5: 'white'}
@@ -220,8 +220,9 @@ class Cube:
 
         return message
 
-    def cubeMD5(self):  #This  method creates an specific MD5 identifier from the string of the previous method
-        md = self.cubeString()
+    def cubeMD5(self,md=""):  #This  method creates an specific MD5 identifier from the string of the previous method
+        if md == "":
+        	md=self.cubeString()
         result =  hashlib.md5(md.encode())
         self.setID(result.hexdigest())
 
