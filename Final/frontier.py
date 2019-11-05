@@ -32,5 +32,5 @@ class Frontier:
 
     def insertList(self, listNodes): #Insert a node in the correct position, maintaining the ascending order
                                     #of f value
-        for each node in listNodes:
+        for node in listNodes:
             self.insertNode(node)
