@@ -66,12 +66,12 @@ class Cube:
             self.turnRight(0)
             self.turnRight(0)
 
-        for i in range(length):
-            aux[i] = self.faces[self.dict_faces[3]][layer][length - 1 - i]
+         for i in range(length):
+            aux[i] = self.faces[self.dict_faces[3]][inv][length - 1 - i]
 
-            self.faces[self.dict_faces[3]][layer][length - 1 - i] = self.faces[self.dict_faces[4]][length - 1 - i][inv]
-            self.faces[self.dict_faces[4]][length - 1 - i][inv] = self.faces[self.dict_faces[2]][layer][i]
-            self.faces[self.dict_faces[2]][layer][i] = self.faces[self.dict_faces[5]][i][layer]
+            self.faces[self.dict_faces[3]][inv][length - 1 - i] = self.faces[self.dict_faces[4]][i][inv]
+            self.faces[self.dict_faces[4]][i][inv] = self.faces[self.dict_faces[2]][layer][i]
+            self.faces[self.dict_faces[2]][layer][i] = self.faces[self.dict_faces[5]][length - 1 - i][layer]
         for i in range(length):
             self.faces[self.dict_faces[5]][i][layer] = aux[length - 1 - i]
 
