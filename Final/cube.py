@@ -6,10 +6,8 @@ class Cube:
     def __init__(self, id="", faces=None):  # constructor
         self.id = id
         self.faces = faces
-        his = {0: 'red', 1: 'blue', 2: 'yellow', 3: 'green', 4: 'orange', 5: 'white'}
-        real = {0: 'white', 1: 'yellow', 2: 'red', 3: 'orange', 4: 'green', 5: 'blue'}
-        self.dict_colours = real
-        self.dict_faces = {0: 'UP', 1: 'DOWN', 2: 'FRONT', 3: 'BACK', 4: 'LEFT', 5: 'RIGHT'}
+        self.dict_colours = {0: 'red', 1: 'blue', 2: 'yellow', 3: 'green', 4: 'orange', 5: 'white'}
+        self.dict_faces = {0: 'BACK', 1: 'DOWN', 2: 'FRONT', 3: 'LEFT', 4: 'RIGHT', 5: 'UP'}
 
     def setID(self,id):
         self.id=id
@@ -43,56 +41,56 @@ class Cube:
     def moveL(self, layer, inv, aux, length):
 
         if (layer == 0):
-            self.turnRight(4)
+            self.turnRight(3) # 3:LEFT
         if (layer == length - 1):
-            self.turnRight(5)
-            self.turnRight(5)
-            self.turnRight(5)
+            self.turnRight(4) # 4:RIGHT
+            self.turnRight(4)
+            self.turnRight(4)
 
         for i in range(length):
-            aux[i] = self.faces[self.dict_faces[3]][i][layer]  # store the layer
+            aux[i] = self.faces[self.dict_faces[0]][i][layer]  # store the layer 0:BACK
 
-            self.faces[self.dict_faces[3]][i][layer] = self.faces[self.dict_faces[1]][i][layer]
+            self.faces[self.dict_faces[0]][i][layer] = self.faces[self.dict_faces[1]][i][layer]	#0:BACK 1:DOWN 2:FRONT 5:UP
             self.faces[self.dict_faces[1]][i][layer] = self.faces[self.dict_faces[2]][i][layer]
-            self.faces[self.dict_faces[2]][i][layer] = self.faces[self.dict_faces[0]][length - 1 - i][inv]
+            self.faces[self.dict_faces[2]][i][layer] = self.faces[self.dict_faces[5]][length - 1 - i][inv]
 
         for i in range(length):
-            self.faces[self.dict_faces[0]][length - 1 - i][inv] = aux[i]
+            self.faces[self.dict_faces[5]][length - 1 - i][inv] = aux[i]	# 5:UP
 
     def moveD(self, layer, inv, aux, length):
 
         if (layer == 0):
-            self.turnRight(1)
+            self.turnRight(1)	# 1:DOWN
         if (layer == length - 1):
-            self.turnRight(0)
-            self.turnRight(0)
-            self.turnRight(0)
+            self.turnRight(5)	# 5:UP
+            self.turnRight(5)
+            self.turnRight(5)
 
         for i in range(length):
-            aux[i] = self.faces[self.dict_faces[3]][inv][length - 1 - i]
+            aux[i] = self.faces[self.dict_faces[0]][inv][length - 1 - i]	# 0:BACK
 
-            self.faces[self.dict_faces[3]][inv][length - 1 - i] = self.faces[self.dict_faces[4]][i][inv]
-            self.faces[self.dict_faces[4]][i][inv] = self.faces[self.dict_faces[2]][layer][i]
-            self.faces[self.dict_faces[2]][layer][i] = self.faces[self.dict_faces[5]][length - 1 - i][layer]
+            self.faces[self.dict_faces[0]][inv][length - 1 - i] = self.faces[self.dict_faces[3]][i][inv]	# 0:BACK 3:LEFT 2:FRONT 4:RIGHT
+            self.faces[self.dict_faces[3]][i][inv] = self.faces[self.dict_faces[2]][layer][i]
+            self.faces[self.dict_faces[2]][layer][i] = self.faces[self.dict_faces[4]][length - 1 - i][layer]
         for i in range(length):
-            self.faces[self.dict_faces[5]][i][layer] = aux[length - 1 - i]
+            self.faces[self.dict_faces[4]][i][layer] = aux[length - 1 - i]	# 4:RIGHT
 
     def moveB(self, layer, inv, aux, length):
 
         if (layer == 0):
-            self.turnRight(3)
+            self.turnRight(0)	# 0:BACK
         if (layer == length - 1):
-            self.turnRight(2)
+            self.turnRight(2)	# 2:FRONT
             self.turnRight(2)
             self.turnRight(2)
 
         for i in range(length):
-            aux[i] = self.faces[self.dict_faces[5]][layer][i]
+            aux[i] = self.faces[self.dict_faces[4]][layer][i]	# 4:RIGHT
 
-            self.faces[self.dict_faces[5]][layer][i] = self.faces[self.dict_faces[1]][layer][i]
-            self.faces[self.dict_faces[1]][layer][i] = self.faces[self.dict_faces[4]][layer][i]
-            self.faces[self.dict_faces[4]][layer][i] = self.faces[self.dict_faces[0]][layer][i]
-            self.faces[self.dict_faces[0]][layer][i] = aux[i]
+            self.faces[self.dict_faces[4]][layer][i] = self.faces[self.dict_faces[1]][layer][i]	# 4:RIGHT 1:DOWN 3:LEFT 5:UP
+            self.faces[self.dict_faces[1]][layer][i] = self.faces[self.dict_faces[3]][layer][i]
+            self.faces[self.dict_faces[3]][layer][i] = self.faces[self.dict_faces[5]][layer][i]
+            self.faces[self.dict_faces[5]][layer][i] = aux[i]
 
     def move(self, movement):  # this method performs the selected move on the cube
 
@@ -159,7 +157,15 @@ class Cube:
                     t.penup()
                     t.goto(x, y)
                     t.pendown()
-                    face = self.faces[self.dict_faces[l]]
+                    if(l==1 or l==2):
+                    	a=l
+                    if(l==4 or l==5):
+                    	a=l-1
+                    if(l==0):
+                    	a=5
+                    if(l==3):
+                    	a=0
+                    face = self.faces[self.dict_faces[a]]
                     t.begin_fill()
                     t.fillcolor(self.dict_colours[face[k][j]])  # here we would have to take the color from the matrix
 
@@ -199,25 +205,11 @@ class Cube:
 
     def cubeString(self):   #This method creates a String from the cube state
         message = ""
-        for j in range(len(self.faces["UP"])):
-            for k in range(len(self.faces["UP"])):
-                message+=str(self.faces[self.dict_faces[3]][j][k])
-        for j in range(len(self.faces["UP"])):
-            for k in range(len(self.faces["UP"])):
-                message+=str(self.faces[self.dict_faces[1]][j][k])
-        for j in range(len(self.faces["UP"])):
-            for k in range(len(self.faces["UP"])):
-                message+=str(self.faces[self.dict_faces[2]][j][k])
-        for j in range(len(self.faces["UP"])):
-            for k in range(len(self.faces["UP"])):
-                message+=str(self.faces[self.dict_faces[4]][j][k])
-        for j in range(len(self.faces["UP"])):
-            for k in range(len(self.faces["UP"])):
-                message+=str(self.faces[self.dict_faces[5]][j][k])
-        for j in range(len(self.faces["UP"])):
-            for k in range(len(self.faces["UP"])):
-                message+=str(self.faces[self.dict_faces[0]][j][k])
-
+        length = len(self.faces["UP"])
+        for i in range(6):
+            for j in range(length):
+                for k in range(length):
+                    message+=str(self.faces[self.dict_faces[i]][j][k])
         return message
 
     def cubeMD5(self,md=""):  #This  method creates an specific MD5 identifier from the string of the previous method
@@ -235,13 +227,13 @@ class Cube:
         json_array = json.load(input_file)
 
         for item in json_array:
-            store_details = {"UP": None, "DOWN": None, "FRONT": None, "BACK": None, "LEFT": None, "RIGHT": None}
-            store_details['UP'] = item['UP']
+            store_details = {"BACK": None, "DOWN": None, "FRONT": None, "LEFT": None, "RIGHT": None, "UP": None}
+            store_details['BACK'] = item['BACK']
             store_details['DOWN'] = item['DOWN']
             store_details['FRONT'] = item['FRONT']
-            store_details['BACK'] = item['BACK']
             store_details['LEFT'] = item['LEFT']
             store_details['RIGHT'] = item['RIGHT']
+            store_details['UP'] = item['UP']
 
         self.setFaces(store_details)
         self.cubeMD5()
