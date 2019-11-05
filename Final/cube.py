@@ -3,10 +3,12 @@ import turtle, json
 
 class Cube:
 
-    def __init__(self, id = None, faces = None):  # constructor
+    def __init__(self, id, faces):  # constructor
         self.id = id
         self.faces = faces
-        self.dict_colours = {0: 'white', 1: 'yellow', 2: 'red', 3: 'orange', 4: 'blue', 5: 'green'}
+        his = {0: 'red', 1: 'blue', 2: 'yellow', 3: 'green', 4: 'orange', 5: 'white'}
+        real = {0: 'white', 1: 'yellow', 2: 'red', 3: 'orange', 4: 'green', 5: 'blue'}
+        self.dict_colours = real
         self.dict_faces = {0: 'UP', 1: 'DOWN', 2: 'FRONT', 3: 'BACK', 4: 'LEFT', 5: 'RIGHT'}
 
     def setID(self,id):
@@ -66,7 +68,7 @@ class Cube:
             self.turnRight(0)
             self.turnRight(0)
 
-         for i in range(length):
+        for i in range(length):
             aux[i] = self.faces[self.dict_faces[3]][inv][length - 1 - i]
 
             self.faces[self.dict_faces[3]][inv][length - 1 - i] = self.faces[self.dict_faces[4]][i][inv]
@@ -117,7 +119,7 @@ class Cube:
                 self.moveB(layer, inv, aux, length)
         self.cubeMD5()
         filename = "" + self.id + "-" + movement + ".json"
-        self.cube2Json(filename)
+        self.cube2Json("saved/"+filename)
 
     def printState(self):   #This method prints a specific state of the cube
 
