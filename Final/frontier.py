@@ -31,6 +31,6 @@ class Frontier:
             return False
 
     def insertList(self, listNodes): #Insert a node in the correct position, maintaining the ascending order
-                                    #of f value
-        for node in listNodes:
-            self.insertNode(node)
+        if listNodes is not None:                            #of f value
+            for node in listNodes:
+                self.insertNode(node)
