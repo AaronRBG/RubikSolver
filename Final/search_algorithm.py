@@ -11,10 +11,16 @@ def limited_search(Prob, strategy, max_depth):
         current_node = fringe.removeNode()
         if Prob.isGoal(current_node.state):
             solution = True
+        elif optimization:
+            cut = False
+            if nodeVisited(current_node, closed):
+                cut = True
         else:
-            ls = Prob.Successors(current_node.state)
-            ln = createListNodes(ls, current_node, max_depth, strategy) #Do createListNodes function
-            fringe.insertList(ln)
+            if not cut:
+                ls = Prob.Successors(current_node.state)
+                ln = createListNodes(ls, current_node, max_depth, strategy) #Do createListNodes function
+                fringe.insertList(ln)
+                closed.append(current_node)
     
     if solution:
         return createSolution(current_node) #Do createSolution function
@@ -60,6 +66,21 @@ def createListNodes(ls, current_node, max_depth, strategy):
 
     return ln
 
+
+def nodeVisited(node, closed):
+    cube1 = Cube()
+    cube2 = Cube()
+    cube1.faces = node.state
+    cube1.cubeMD5()
+    for n in closed:
+        cube2.faces = n.state
+        cube2.cubeMD5()
+        if cube1.id == cube2.id:
+            if node.f < n.f:
+                return False
+            else
+                return True
+    return False
 
 def createSolution(current_node):
     sol = []
