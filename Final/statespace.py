@@ -15,6 +15,7 @@ def sucessors(state):
 
 		movement = next(moves)
 		ret[i].move(movement)
+		ret[i] = (movement,ret[i],1)
 
 	return ret
 
