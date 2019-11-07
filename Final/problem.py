@@ -38,7 +38,7 @@ class Problem:
 				return True
 		return False
 
-	def sucessors(state):
+	def sucessors(self,state):
 
 		ret = [ Cube() for i in range(12)]
 
