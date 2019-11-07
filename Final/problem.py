@@ -33,8 +33,9 @@ class Problem:
 
 	def isGoal(self,state):
 
-		if state.id == self.goal:
-			return True
+		if state is Not None:
+			if state.id == self.goal:
+				return True
 		return False
 
 	def sucessors(state):
@@ -55,12 +56,3 @@ class Problem:
 			ret[i] = (movement,ret[i],1)
 
 		return ret
-
-print('Introduce the json filename of the Initial_state')
-filename = input()
-
-c = Cube()
-c.json2cube(filename)
-
-p = Problem(c)
-print(p.isGoal(c))
