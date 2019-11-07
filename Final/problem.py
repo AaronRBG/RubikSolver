@@ -5,13 +5,9 @@ import random
 
 class Problem:
 
-	def __init__(self):  # constructor
+	def __init__(self,Initial_state):  # constructor
 
-		print('Introduce the json filename of the Initial_state')
-		filename = input()
-
-		self.Initial_state = Cube()
-		self.Initial_state.json2cube(filename)
+		self.Initial_state = Initial_state
 		self.createGoal()
 
 	def createGoal(self):
@@ -60,5 +56,11 @@ class Problem:
 
 		return ret
 
-p = Problem()
-print(p.isGoal(p.Initial_state))
+print('Introduce the json filename of the Initial_state')
+filename = input()
+
+c = Cube()
+c.json2cube(filename)
+
+p = Problem(c)
+print(p.isGoal(c))
