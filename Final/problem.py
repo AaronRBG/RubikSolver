@@ -33,7 +33,7 @@ class Problem:
 
 	def isGoal(self,state):
 
-		if state is Not None:
+		if state is not None:
 			if state.id == self.goal:
 				return True
 		return False
