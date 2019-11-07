@@ -5,27 +5,34 @@ import random
 
 class Problem:
 
-	def __init__(self, Initial_state):  # constructor
-		goal_cube = Cube()
+	def __init__(self):  # constructor
 
+		print('Introduce the json filename of the Initial_state')
+		filename = input()
+
+		self.Initial_state = Cube()
+		self.Initial_state.json2cube(filename)
+		self.createGoal()
+
+	def createGoal(self):
+
+		goal_cube = Cube()
 		length=0
-		for state in Initial_state.faces.values():
+		string = ""
+
+		for state in self.Initial_state.faces.values():
 			for i in state:
 				for j in i:
 					length+=1
 			break
 
-		string = ""
 		color2position = {0: 3, 1: 1, 2: 2, 3: 4, 4: 5, 5: 0}
+
 		for i in range(6):
 			for j in range(int(length)):
 				string+=str(color2position[i])
 		goal_cube.cubeMD5(string)
 
-		print(string)
-		print(Initial_state.cubeString)
-
-		self.Initial_state = Initial_state
 		self.goal = goal_cube.id
 
 	def isGoal(self,state):
@@ -49,13 +56,9 @@ class Problem:
 
 			movement = next(moves)
 			ret[i].move(movement)
+			ret[i] = (movement,ret[i],1)
 
 		return ret
 
-print('Introduce a json filename')
-filename = input()
-c = Cube()
-c.json2cube(filename)
-
-p = Problem(c)
-print(p.isGoal(c))
+p = Problem()
+print(p.isGoal(p.Initial_state))
