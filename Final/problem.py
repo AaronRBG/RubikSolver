@@ -10,7 +10,6 @@ class Problem:
 
 		self.createInitialCube(Initial_state_json)
 		self.createGoal()
-
 	def createInitialCube(self, Initial_state):
 		c = Cube()
 		c.json2cube(Initial_state)

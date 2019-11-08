@@ -3,7 +3,7 @@ from problem import Problem
 from node import Node
 from cube import Cube
 import json
-import time
+from time import time
 
 def limited_search(Prob, strategy, max_depth):
     fringe = Frontier()
@@ -36,11 +36,14 @@ def limited_search(Prob, strategy, max_depth):
         return None
 
 def search(Prob, strategy, max_depth, inc_depth):
-    current_depth = inc_depth
     solution = None
-    while (not solution) and (current_depth <= max_depth):
-        solution = limited_search(Prob, strategy, current_depth)
-        current_depth += inc_depth
+    if strategy == 'IDS':
+        current_depth = inc_depth
+        while (not solution) and (current_depth <= max_depth):
+            solution = limited_search(Prob, strategy, current_depth)
+            current_depth += inc_depth
+    else:
+        solution = limited_search(Prob, strategy, max_depth)
     return solution
 
 def createListNodes(ls, current_node, max_depth, strategy):
@@ -59,7 +62,7 @@ def createListNodes(ls, current_node, max_depth, strategy):
         ln[i].cost = ls[i][2] + cost_current
         ln[i].parent = current_node
         ln[i].d = d_current + 1
-        if strategy == 'DFS':
+        if strategy == 'DFS' or strategy == 'LDS' or strategy == 'IDS':
             ln[i].f = 1 / (ln[i].d + 1)
 
         elif strategy == 'BFS':
@@ -67,9 +70,9 @@ def createListNodes(ls, current_node, max_depth, strategy):
 
         elif strategy == 'UCS':
             ln[i].f = ln[i].cost
-
-        elif strategy == 'LDS':
-            ln[i].f = ln[i].d
+        else:
+            print("ERROR: Not a valid type of algorithm")
+            exit
 
     return ln
 
