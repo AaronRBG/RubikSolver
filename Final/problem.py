@@ -6,10 +6,15 @@ import random
 
 class Problem:
 
-	def __init__(self,Initial_state):  # constructor
+	def __init__(self,Initial_state_json):  # constructor
 
-		self.Initial_state = Initial_state
+		self.createInitialCube(Initial_state_json)
 		self.createGoal()
+
+	def createInitialCube(self, Initial_state):
+		c = Cube()
+		c.json2cube(Initial_state)
+		self.Initial_state = c
 
 	def createGoal(self):
 
