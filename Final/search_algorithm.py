@@ -99,11 +99,3 @@ def createSolution(current_node):
         sol.append(node)
         node = node.parent
     return sol
-
-print('Introduce the json filename of the Initial_state')
-filename = input()
-c = Cube()
-c.json2cube(filename)
-Prob = Problem(c) #Clase Problem with InitialState and functions isGoal and sucessors
-sol = limited_search(Prob, "DFS", 2)
-print(sol)
