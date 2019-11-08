@@ -23,7 +23,7 @@ def limited_search(Prob, strategy, max_depth):
             else:
                 cut = False
             if not cut:
-                ls = Prob.sucessors(current_node.state)
+                ls = Prob.successors(current_node.state)
                 ln = createListNodes(ls, current_node, max_depth, strategy) #Do createListNodes function
                 fringe.insertList(ln)
                 closed.append(current_node)
