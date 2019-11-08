@@ -3,30 +3,33 @@ from problem import Problem
 from node import Node
 from cube import Cube
 import json
+import time
 
 def limited_search(Prob, strategy, max_depth):
     fringe = Frontier()
-    initial_node = Node(Prob.Initial_state, 0, 0, 0)
+    initial_node = Node(0,Prob.Initial_state, 0, 0, 0)
     fringe.insertNode(initial_node)
     closed = []
     solution = False
-    optimization = True
+    optimization = False
     cut = False
     while (solution is not True) and (fringe.isEmpty() is not True):
         current_node = fringe.removeNode()
         if Prob.isGoal(current_node.state):
             solution = True
         else:
-            if optimization:
-                if nodeVisited(current_node, closed):
-                    cut = True
-                else:
-                    cut = False
+            if nodeVisited(current_node, closed, optimization):
+                cut = True
+            else:
+                cut = False
             if not cut:
-                ls = Prob.successors(current_node.state)
+                ls = Prob.sucessors(current_node.state)
                 ln = createListNodes(ls, current_node, max_depth, strategy) #Do createListNodes function
                 fringe.insertList(ln)
-                closed.append(current_node)  
+                closed.append(current_node)
+                print(str(len(fringe.frontier))+" "+str(len(closed)))
+            else:
+                print("CUT")
     if solution:
         return createSolution(current_node) #Do createSolution function
     else:
@@ -44,9 +47,10 @@ def createListNodes(ls, current_node, max_depth, strategy):
     cost_current = current_node.cost
     d_current = current_node.d
     f_current = current_node.f
-    ln = [Node() for i in range(12)]
+    ln = [Node() for i in range(len(ls))]
 
     if d_current == max_depth:
+        print(0)
         return None
 
     for i in range(len(ls)):
@@ -69,7 +73,7 @@ def createListNodes(ls, current_node, max_depth, strategy):
 
     return ln
 
-def nodeVisited(node, closed):
+def nodeVisited(node, closed, optimization):
     cube1 = Cube()
     cube2 = Cube()
     cube1.faces = node.state.faces
@@ -78,8 +82,11 @@ def nodeVisited(node, closed):
         cube2.faces = n.state.faces
         cube2.cubeMD5()
         if cube1.id == cube2.id:
-            if node.f < n.f:
-                return False
+            if optimization:
+                if node.f < n.f:
+                    return False
+                else:
+                    return True
             else:
                 return True
     return False 
@@ -93,11 +100,10 @@ def createSolution(current_node):
         node = node.parent
     return sol
 
-filename_initial_state = "cube.json"
-
-Prob = Problem(filename_initial_state) #Clase Problem with InitialState and functions isGoal and Successors
-sol = limited_search(Prob, "BFS", 4)
-if sol is not None:
-
-    for e in sol:
-        print(e.state.id)
+print('Introduce the json filename of the Initial_state')
+filename = input()
+c = Cube()
+c.json2cube(filename)
+Prob = Problem(c) #Clase Problem with InitialState and functions isGoal and sucessors
+sol = limited_search(Prob, "DFS", 2)
+print(sol)

@@ -40,16 +40,16 @@ class Problem:
 
 	def sucessors(self,state):
 
-		ret = [ Cube() for i in range(12)]
+		moves = iter(state.generateMoves())
+
+		ret = [ Cube() for i in range(len(state.generateMoves()))]
 
 		state.cube2Json("saved/"+"state.json")
 
-		for i in range(12):
+		for i in range(len(state.generateMoves())):
 			ret[i].json2cube("saved/"+"state.json")
 
-		moves = iter(state.generateMoves())
-
-		for i in range(12):
+		for i in range(len(state.generateMoves())):
 
 			movement = next(moves)
 			ret[i].move(movement)
