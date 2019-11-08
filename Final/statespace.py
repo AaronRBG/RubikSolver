@@ -1,6 +1,6 @@
 from cube import Cube
 
-def sucessors(state):
+def successors(state):
 
 	moves = iter(state.generateMoves())
 
