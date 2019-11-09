@@ -16,7 +16,7 @@ print('--------- Introduce the maximum depth of the nodes of the problem: ------
 depth = int(input())
 print('--------- Introduce the incremental constant of the depth (if it is necessary for IDS): ---------')
 inc_depth = int(input())
-Prob = Problem(filename) #Clase Problem with InitialState and functions isGoal and sucessors
+Prob = Problem(filename_input) #Clase Problem with InitialState and functions isGoal and sucessors
 sol = search(Prob, algortihm, depth, inc_depth)
 print('############### The SOLUTION of the cube with movements is the next one: #################')
 for i in range(len(sol)-1,0,-1):
