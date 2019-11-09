@@ -1,4 +1,5 @@
 from cube import Cube
+import copy
 
 def successorsCube(state):
 
@@ -6,13 +7,9 @@ def successorsCube(state):
 
 	ret = [ Cube() for i in range(len(state.generateMoves()))]
 
-	state.cube2Json("state.json")
-
 	for i in range(len(state.generateMoves())):
-		ret[i].json2cube("state.json")
-
-	for i in range(len(state.generateMoves())):
-
+		
+		ret[i] = copy.deepcopy(state)
 		movement = next(moves)
 		ret[i].move(movement)
 		ret[i] = (movement,ret[i],1)
