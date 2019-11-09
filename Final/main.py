@@ -2,7 +2,7 @@
 from problem import Problem
 from search_algorithm import limited_search, search
 
-filename_output = "solution.out"
+filename_output = "solution.txt"
 
 def writeFile(filename, text):
     with open(filename, 'a') as outfile:

@@ -27,8 +27,6 @@ def limited_search(Prob, strategy, max_depth):
                 ln = createListNodes(ls, current_node, max_depth, strategy) #Do createListNodes function
                 fringe.insertList(ln)
                 closed.append(current_node)
-            else:
-                print("CUT")
     if solution:
         return createSolution(current_node) #Do createSolution function
     else:
@@ -52,7 +50,6 @@ def createListNodes(ls, current_node, max_depth, strategy):
     ln = [Node() for i in range(len(ls))]
 
     if d_current == max_depth:
-        print(0)
         return None
 
     for i in range(len(ls)):

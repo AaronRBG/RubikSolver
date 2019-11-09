@@ -116,8 +116,6 @@ class Cube:
             for i in range(3):
                 self.moveB(layer, inv, aux, length)
         self.cubeMD5()
-        filename = "" + self.id + "-" + movement + ".json"
-        self.cube2Json("saved/"+filename)
 
     def printState(self):   #This method prints a specific state of the cube
 
