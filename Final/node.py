@@ -7,3 +7,4 @@ class Node:
         self.action = action
         self.d = d
         self.f = f       
+	
