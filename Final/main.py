@@ -22,5 +22,5 @@ print('############### The SOLUTION of the cube with movements is the next one: 
 for i in range(len(sol)-1,0,-1):
     print(sol[i-1].action)
     writeFile(filename_output, sol[i-1].action)
-    writeFile(filename_output, str(sol[i-1].state))
+    writeFile(filename_output, str(sol[i-1].state.faces))
 
