@@ -6,10 +6,10 @@ def successorsCube(state):
 
 	ret = [ Cube() for i in range(len(state.generateMoves()))]
 
-	state.cube2Json("saved/"+"state.json")
+	state.cube2Json("state.json")
 
 	for i in range(len(state.generateMoves())):
-		ret[i].json2cube("saved/"+"state.json")
+		ret[i].json2cube("state.json")
 
 	for i in range(len(state.generateMoves())):
 
