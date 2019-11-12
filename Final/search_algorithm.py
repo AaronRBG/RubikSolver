@@ -11,10 +11,20 @@ def limited_search(Prob, strategy, max_depth):
     fringe.insertNode(initial_node)
     closed = []
     solution = False
-    optimization = False
+    optimization = True
     cut = False
+    visuals = True
     while (solution is not True) and (fringe.isEmpty() is not True):
         current_node = fringe.removeNode()
+        if visuals:
+            string = ""
+            depth_string = ""
+            for i in range(current_node.d):
+                string+="____"
+                depth_string+="|___"
+            depth_string+="|"
+            print(string)
+            print(depth_string)
         if Prob.isGoal(current_node.state):
             solution = True
         else:
@@ -73,23 +83,22 @@ def createListNodes(ls, current_node, max_depth, strategy):
     return ln
 
 def nodeVisited(node, closed, optimization):
-    cube1 = Cube()
-    cube2 = Cube()
-    cube1.faces = node.state.faces
-    cube1.cubeMD5()
     for n in closed:
-        cube2.faces = n.state.faces
-        cube2.cubeMD5()
-        if cube1.id == cube2.id:
-            if optimization:
-                if node.f < n.f:
-                    return False
-                else:
-                    return True
-            else:
-                return True
-    return False 
+        res = areEqual(node,n,optimization)
+        if res:
+            return True
+    return False
 
+def areEqual(node1, node2, optimization):
+    cube1=node1.state
+    cube2=node2.state
+    if cube1.id == cube2.id:
+        if optimization:
+            if node1.f < node2.f:
+                return True
+        else:
+            return True
+    return False
 
 def createSolution(current_node):
     sol = []
