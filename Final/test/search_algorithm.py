@@ -116,7 +116,7 @@ def createSolution(current_node):
         node = node.parent
     return sol
 
-def generateH(node):
+def generateH(node): //Terminar metodo
     N = len(node.state.faces)
     for i in node.state.faces:
 
