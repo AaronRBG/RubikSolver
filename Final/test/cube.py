@@ -50,44 +50,44 @@ class Cube:
         for i in range(length):
             aux[i] = self.faces[self.dict_faces[0]][i][layer]  # store the layer 0:BACK
 
-            self.faces[self.dict_faces[0]][i][layer] = self.faces[self.dict_faces[1]][i][layer]	#0:BACK 1:DOWN 2:FRONT 5:UP
+            self.faces[self.dict_faces[0]][i][layer] = self.faces[self.dict_faces[1]][i][layer] #0:BACK 1:DOWN 2:FRONT 5:UP
             self.faces[self.dict_faces[1]][i][layer] = self.faces[self.dict_faces[2]][i][layer]
             self.faces[self.dict_faces[2]][i][layer] = self.faces[self.dict_faces[5]][length - 1 - i][inv]
 
         for i in range(length):
-            self.faces[self.dict_faces[5]][length - 1 - i][inv] = aux[i]	# 5:UP
+            self.faces[self.dict_faces[5]][length - 1 - i][inv] = aux[i]    # 5:UP
 
     def moveD(self, layer, inv, aux, length):
 
         if (layer == 0):
-            self.turnRight(1)	# 1:DOWN
+            self.turnRight(1)   # 1:DOWN
         if (layer == length - 1):
-            self.turnRight(5)	# 5:UP
+            self.turnRight(5)   # 5:UP
             self.turnRight(5)
             self.turnRight(5)
 
         for i in range(length):
-            aux[i] = self.faces[self.dict_faces[0]][inv][length - 1 - i]	# 0:BACK
+            aux[i] = self.faces[self.dict_faces[0]][inv][length - 1 - i]    # 0:BACK
 
-            self.faces[self.dict_faces[0]][inv][length - 1 - i] = self.faces[self.dict_faces[3]][i][inv]	# 0:BACK 3:LEFT 2:FRONT 4:RIGHT
+            self.faces[self.dict_faces[0]][inv][length - 1 - i] = self.faces[self.dict_faces[3]][i][inv]    # 0:BACK 3:LEFT 2:FRONT 4:RIGHT
             self.faces[self.dict_faces[3]][i][inv] = self.faces[self.dict_faces[2]][layer][i]
             self.faces[self.dict_faces[2]][layer][i] = self.faces[self.dict_faces[4]][length - 1 - i][layer]
         for i in range(length):
-            self.faces[self.dict_faces[4]][i][layer] = aux[length - 1 - i]	# 4:RIGHT
+            self.faces[self.dict_faces[4]][i][layer] = aux[length - 1 - i]  # 4:RIGHT
 
     def moveB(self, layer, inv, aux, length):
 
         if (layer == 0):
-            self.turnRight(0)	# 0:BACK
+            self.turnRight(0)   # 0:BACK
         if (layer == length - 1):
-            self.turnRight(2)	# 2:FRONT
+            self.turnRight(2)   # 2:FRONT
             self.turnRight(2)
             self.turnRight(2)
 
         for i in range(length):
-            aux[i] = self.faces[self.dict_faces[4]][layer][i]	# 4:RIGHT
+            aux[i] = self.faces[self.dict_faces[4]][layer][i]   # 4:RIGHT
 
-            self.faces[self.dict_faces[4]][layer][i] = self.faces[self.dict_faces[1]][layer][i]	# 4:RIGHT 1:DOWN 3:LEFT 5:UP
+            self.faces[self.dict_faces[4]][layer][i] = self.faces[self.dict_faces[1]][layer][i] # 4:RIGHT 1:DOWN 3:LEFT 5:UP
             self.faces[self.dict_faces[1]][layer][i] = self.faces[self.dict_faces[3]][layer][i]
             self.faces[self.dict_faces[3]][layer][i] = self.faces[self.dict_faces[5]][layer][i]
             self.faces[self.dict_faces[5]][layer][i] = aux[i]
@@ -116,8 +116,6 @@ class Cube:
             for i in range(3):
                 self.moveB(layer, inv, aux, length)
         self.cubeMD5()
-        filename = "" + self.id + "-" + movement + ".json"
-        self.cube2Json("saved/"+filename)
 
     def printState(self):   #This method prints a specific state of the cube
 
@@ -158,13 +156,13 @@ class Cube:
                     t.goto(x, y)
                     t.pendown()
                     if(l==1 or l==2):
-                    	a=l
+                        a=l
                     if(l==4 or l==5):
-                    	a=l-1
+                        a=l-1
                     if(l==0):
-                    	a=5
+                        a=5
                     if(l==3):
-                    	a=0
+                        a=0
                     face = self.faces[self.dict_faces[a]]
                     t.begin_fill()
                     t.fillcolor(self.dict_colours[face[k][j]])  # here we would have to take the color from the matrix
@@ -214,7 +212,7 @@ class Cube:
 
     def cubeMD5(self,md=""):  #This  method creates an specific MD5 identifier from the string of the previous method
         if md == "":
-        	md=self.cubeString()
+            md=self.cubeString()
         result =  hashlib.md5(md.encode())
         self.setID(result.hexdigest())
 

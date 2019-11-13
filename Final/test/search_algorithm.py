@@ -4,18 +4,27 @@ from node import Node
 from cube import Cube
 import json
 from time import time
-import sys
 
-def limited_search(Prob, strategy, max_depth, nodes, memory):
+def limited_search(Prob, strategy, max_depth):
     fringe = Frontier()
     initial_node = Node(0,Prob.Initial_state, 0, 0, 0)
     fringe.insertNode(initial_node)
     closed = []
     solution = False
-    optimization = False
+    optimization = True
     cut = False
+    visuals = True
     while (solution is not True) and (fringe.isEmpty() is not True):
         current_node = fringe.removeNode()
+        if visuals:
+            string = ""
+            depth_string = ""
+            for i in range(current_node.d):
+                string+="____"
+                depth_string+="|___"
+            depth_string+="|"
+            print(string)
+            print(depth_string)
         if Prob.isGoal(current_node.state):
             solution = True
         else:
@@ -26,41 +35,22 @@ def limited_search(Prob, strategy, max_depth, nodes, memory):
             if not cut:
                 ls = Prob.successors(current_node.state)
                 ln = createListNodes(ls, current_node, max_depth, strategy) #Do createListNodes function
-                if ln is not None:
-                    num_nodes = 0
-                    mem = 0
-                    for i in range(len(ln)):
-                        num_nodes += 1
-                        mem += sys.getsizeof(ln[i])
-                nodes += num_nodes
-                memory += mem / float(1024)   #to kilobytes
                 fringe.insertList(ln)
                 closed.append(current_node)
-            else:
-                print("CUT")
     if solution:
-        return createSolution(current_node), nodes, memory #Do createSolution function
+        return createSolution(current_node) #Do createSolution function
     else:
-        return None, nodes, memory
+        return None
 
 def search(Prob, strategy, max_depth, inc_depth):
-    start_time = time()
     solution = None
     if strategy == 'IDS':
         current_depth = inc_depth
-        nodes = 0
-        memory = 0
         while (not solution) and (current_depth <= max_depth):
-            solution, num_nodes, mem = limited_search(Prob, strategy, current_depth, nodes, memory)
+            solution = limited_search(Prob, strategy, current_depth)
             current_depth += inc_depth
-            nodes += num_nodes
-            memory += mem
     else:
-        solution, nodes, memory = limited_search(Prob, strategy, max_depth, 0, 0)
-    finish_time = time()
-    print("========== Number of created nodes: ", nodes," =============================")
-    print("========== Memoria utilizada: ", memory/float(1024), " MB ===========================")
-    print("========== Execution time of the search: ", finish_time-start_time, " seconds ==================")
+        solution = limited_search(Prob, strategy, max_depth)
     return solution
 
 def createListNodes(ls, current_node, max_depth, strategy):
@@ -68,8 +58,8 @@ def createListNodes(ls, current_node, max_depth, strategy):
     d_current = current_node.d
     f_current = current_node.f
     ln = [Node() for i in range(len(ls))]
+
     if d_current == max_depth:
-        print(0)
         return None
 
     for i in range(len(ls)):
@@ -87,6 +77,12 @@ def createListNodes(ls, current_node, max_depth, strategy):
         elif strategy == 'UCS':
             ln[i].f = ln[i].cost
 
+        elif strategy == 'Greedy':
+            ln[i].f = ln[i].h
+
+        elif strategy == 'A*':
+            ln[i].f = ln[i].h + ln[i].cost
+
         else:
             print("ERROR: Not a valid type of algorithm")
             exit
@@ -94,23 +90,22 @@ def createListNodes(ls, current_node, max_depth, strategy):
     return ln
 
 def nodeVisited(node, closed, optimization):
-    cube1 = Cube()
-    cube2 = Cube()
-    cube1.faces = node.state.faces
-    cube1.cubeMD5()
     for n in closed:
-        cube2.faces = n.state.faces
-        cube2.cubeMD5()
-        if cube1.id == cube2.id:
-            if optimization:
-                if node.f < n.f:
-                    return False
-                else:
-                    return True
-            else:
-                return True
-    return False 
+        res = areEqual(node,n,optimization)
+        if res:
+            return True
+    return False
 
+def areEqual(node1, node2, optimization):
+    cube1=node1.state
+    cube2=node2.state
+    if cube1.id == cube2.id:
+        if optimization:
+            if node1.f < node2.f:
+                return True
+        else:
+            return True
+    return False
 
 def createSolution(current_node):
     sol = []

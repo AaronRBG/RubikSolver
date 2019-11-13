@@ -45,5 +45,3 @@ class Problem:
 
 	def successors(self,state):
 		return successorsCube(state)
-		
-		
