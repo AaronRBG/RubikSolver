@@ -3,6 +3,7 @@ from problem import Problem
 from node import Node
 from cube import Cube
 import json
+import math 
 from time import time
 
 def limited_search(Prob, strategy, max_depth):
@@ -78,10 +79,10 @@ def createListNodes(ls, current_node, max_depth, strategy):
             ln[i].f = ln[i].cost
 
         elif strategy == 'Greedy':
-            ln[i].f = ln[i].h
+            ln[i].f = generateH(ln[i])
 
         elif strategy == 'A*':
-            ln[i].f = ln[i].h + ln[i].cost
+            ln[i].f = generateH(ln[i]) + ln[i].cost
 
         else:
             print("ERROR: Not a valid type of algorithm")
@@ -114,3 +115,12 @@ def createSolution(current_node):
         sol.append(node)
         node = node.parent
     return sol
+
+def generateH(node):
+    N = len(node.state.faces)
+    for i in node.state.faces:
+
+    entropy = 0
+        for c = 0 to 5
+            if counter[c] > 0.0:
+                entropy += counter[c]/(N*N) * math.log(counter[c]/(N*N),6)
