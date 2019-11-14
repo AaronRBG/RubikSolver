@@ -4,6 +4,7 @@ from node import Node
 from cube import Cube
 import json
 from time import time
+import math
 
 def limited_search(Prob, strategy, max_depth):
     fringe = Frontier()
@@ -17,14 +18,7 @@ def limited_search(Prob, strategy, max_depth):
     while (solution is not True) and (fringe.isEmpty() is not True):
         current_node = fringe.removeNode()
         if visuals:
-            string = ""
-            depth_string = ""
-            for i in range(current_node.d):
-                string+="____"
-                depth_string+="|___"
-            depth_string+="|"
-            print(string)
-            print(depth_string)
+            printDepth(current_node)
         if Prob.isGoal(current_node.state):
             solution = True
         else:
@@ -53,6 +47,21 @@ def search(Prob, strategy, max_depth, inc_depth):
         solution = limited_search(Prob, strategy, max_depth)
     return solution
 
+def generateH(node):
+    N = len(node.state.faces["UP"][0])
+    entropy = 0
+    for i in node.state.faces.values():
+        counter = [ 0 for i in range(6) ]
+        for c in range(6):
+            for j in i:
+                for k in j:
+                    if k==c:
+                        counter[c]+=1
+            if counter[c] > 0.0:
+                entropy += counter[c]/(N*N) * math.log(counter[c]/(N*N),6)
+
+    return -entropy
+
 def createListNodes(ls, current_node, max_depth, strategy):
     cost_current = current_node.cost
     d_current = current_node.d
@@ -76,6 +85,15 @@ def createListNodes(ls, current_node, max_depth, strategy):
 
         elif strategy == 'UCS':
             ln[i].f = ln[i].cost
+
+        elif strategy == 'Greedy':
+            ln[i].h = generateH(ln[i])
+            ln[i].f = ln[i].h
+
+        elif strategy == 'A*':
+            ln[i].h = generateH(ln[i])
+            ln[i].f = ln[i].h + ln[i].cost
+
         else:
             print("ERROR: Not a valid type of algorithm")
             exit
@@ -107,3 +125,13 @@ def createSolution(current_node):
         sol.append(node)
         node = node.parent
     return sol
+
+def printDepth(current_node):
+    string = ""
+    depth_string = ""
+    for i in range(current_node.d):
+        string+="____"
+        depth_string+="|___"
+    depth_string+="|"
+    print(string)
+    print(depth_string + " " + str(current_node.h))
