@@ -22,10 +22,10 @@ else:
 Prob = Problem(filename_input) #Clase Problem with InitialState and functions isGoal and sucessors
 sol = search(Prob, algorithm, depth, inc_depth)
 if sol is not None:
-	print('############### The SOLUTION of the cube with movements is the next one: #################')
-	for i in range(len(sol)-1,0,-1):
-	    print(sol[i-1].action)
-	    writeFile(filename_output, sol[i-1].action)
-	    writeFile(filename_output, str(sol[i-1].state.faces))
+    print('############### The SOLUTION of the cube with movements is the next one: #################')
+    for i in range(len(sol)-1,0,-1):
+        print(sol[i-1].action)
+        writeFile(filename_output, sol[i-1].action)
+        writeFile(filename_output, str(sol[i-1].state.faces))
 else:
-	print('############### No solution was found #################')
+    print('############### No solution was found #################')

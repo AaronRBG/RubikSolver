@@ -8,7 +8,7 @@ import math
 
 def limited_search(Prob, strategy, max_depth):
     fringe = Frontier()
-    initial_node = Node(0,Prob.Initial_state, 0, 0, 0)
+    initial_node = Node(Prob.Initial_state, 0, "", 0, 0)
     fringe.insertNode(initial_node)
     closed = []
     solution = False
@@ -31,6 +31,7 @@ def limited_search(Prob, strategy, max_depth):
                 ln = createListNodes(ls, current_node, max_depth, strategy) #Do createListNodes function
                 fringe.insertList(ln)
                 closed.append(current_node)
+
     if solution:
         return createSolution(current_node) #Do createSolution function
     else:
