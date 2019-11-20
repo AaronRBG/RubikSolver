@@ -9,34 +9,30 @@ class Cube:
         self.dict_colours = {0: 'red', 1: 'blue', 2: 'yellow', 3: 'green', 4: 'orange', 5: 'white'}
         self.dict_faces = {0: 'BACK', 1: 'DOWN', 2: 'FRONT', 3: 'LEFT', 4: 'RIGHT', 5: 'UP'}
 
-    def setID(self,id):
-        self.id=id
-
-    def setFaces(self,faces):
-        self.faces=faces
-
-    def generateMoves(self):  # this method computes the valid moves for the cube
-
-        n = len(self.faces["UP"])  # here we get the dimension of the cube NxNxN
+    def generateMovesLetter(self, letter):
 
         ret = ()
+        n = len(self.faces["UP"])  # here we get the dimension of the cube NxNxN
         aux = ""
 
         for i in range(n):
-            aux = "L" + str(i)
-            ret += (aux,)
-            aux = "l" + str(i)
-            ret += (aux,)
-            aux = "D" + str(i)
-            ret += (aux,)
-            aux = "d" + str(i)
-            ret += (aux,)
-            aux = "B" + str(i)
-            ret += (aux,)
-            aux = "b" + str(i)
+            aux = letter + str(i)
             ret += (aux,)
 
-        return ret;
+        return ret
+
+    def generateMoves(self):  # this method computes the valid moves for the cube
+
+        ret = ()
+
+        ret+= self.generateMovesLetter("B")
+        ret+= self.generateMovesLetter("b")
+        ret+= self.generateMovesLetter("D")
+        ret+= self.generateMovesLetter("d")
+        ret+= self.generateMovesLetter("L")
+        ret+= self.generateMovesLetter("l")
+
+        return ret
 
     def moveL(self, layer, inv, aux, length):
 
@@ -63,8 +59,6 @@ class Cube:
             self.turnRight(1)	# 1:DOWN
         if (layer == length - 1):
             self.turnRight(5)	# 5:UP
-            self.turnRight(5)
-            self.turnRight(5)
 
         for i in range(length):
             aux[i] = self.faces[self.dict_faces[0]][inv][length - 1 - i]	# 0:BACK
@@ -115,7 +109,8 @@ class Cube:
         if (mov == 'b'):
             for i in range(3):
                 self.moveB(layer, inv, aux, length)
-        self.cubeMD5()
+        md = self.cubeString()
+        self.cubeMD5(self.cubeString())
 
     def printState(self):   #This method prints a specific state of the cube
 
@@ -212,9 +207,11 @@ class Cube:
 
     def cubeMD5(self,md=""):  #This  method creates an specific MD5 identifier from the string of the previous method
         if md == "":
-        	md=self.cubeString()
-        result =  hashlib.md5(md.encode())
-        self.setID(result.hexdigest())
+            md = self.cubeString()
+
+        encoding = md.encode()
+        result =  hashlib.md5(encoding)
+        self.id = result.hexdigest()
 
     def cube2Json(self, filename): #This method creates a json file from a cube object
         with open(filename, 'w') as outfile:
@@ -233,5 +230,6 @@ class Cube:
             store_details['RIGHT'] = item['RIGHT']
             store_details['UP'] = item['UP']
 
-        self.setFaces(store_details)
-        self.cubeMD5()
+        self.faces = store_details
+        md = self.cubeString()
+        self.cubeMD5(self.cubeString())

@@ -6,9 +6,13 @@ import json
 from time import time
 import math
 
+id=0
+
 def limited_search(Prob, strategy, max_depth):
     fringe = Frontier()
-    initial_node = Node(Prob.Initial_state, 0, "", 0, 0)
+    global id
+    initial_node = Node(0, Prob.Initial_state, 0, "", 0, 0)
+    id+=1
     fringe.insertNode(initial_node)
     closed = []
     solution = False
@@ -22,8 +26,10 @@ def limited_search(Prob, strategy, max_depth):
         if Prob.isGoal(current_node.state):
             solution = True
         else:
-            if nodeVisited(current_node, closed, optimization):
+            if optimization and nodeVisited(current_node, closed, optimization, strategy):
                 cut = True
+                if visuals:
+                    print("CUT")
             else:
                 cut = False
             if not cut:
@@ -61,18 +67,27 @@ def generateH(node):
             if counter[c] > 0.0:
                 entropy += counter[c]/(N*N) * math.log(counter[c]/(N*N),6)
 
-    return -entropy
+    entropy = round(-entropy,2)
+
+    return entropy
 
 def createListNodes(ls, current_node, max_depth, strategy):
     cost_current = current_node.cost
     d_current = current_node.d
     f_current = current_node.f
-    ln = [Node() for i in range(len(ls))]
+
+    ln = []
+    for i in range(len(ls)):
+        global id
+        ln.append(Node())
 
     if d_current == max_depth:
         return None
 
     for i in range(len(ls)):
+        global id
+        ln[i].id = id
+        id+=1
         ln[i].action = ls[i][0]
         ln[i].state = ls[i][1]
         ln[i].cost = ls[i][2] + cost_current
@@ -101,20 +116,23 @@ def createListNodes(ls, current_node, max_depth, strategy):
 
     return ln
 
-def nodeVisited(node, closed, optimization):
+def nodeVisited(node, closed, optimization, strategy):
     for n in closed:
-        res = areEqual(node,n,optimization)
+        res = areEqual(node,n,optimization, strategy)
         if res:
             return True
     return False
 
-def areEqual(node1, node2, optimization):
-    cube1=node1.state
-    cube2=node2.state
-    if cube1.id == cube2.id:
+def areEqual(node1, node2, optimization, strategy):
+    if node1.state.id == node2.state.id:
         if optimization:
-            if node1.f < node2.f:
-                return True
+            if strategy == 'DFS':
+                print(node1.d)
+                if node1.d >= node2.d:
+                    return True
+            else:    
+                if node1.f >= node2.f:
+                    return True
         else:
             return True
     return False
@@ -125,14 +143,22 @@ def createSolution(current_node):
     while node is not None:
         sol.append(node)
         node = node.parent
+    sol.append(node)
     return sol
 
 def printDepth(current_node):
     string = ""
     depth_string = ""
+    node = current_node
+    parents = []
+    while node is not None:
+        parents.append(node)
+        node = node.parent
+
     for i in range(current_node.d):
-        string+="____"
-        depth_string+="|___"
+        string+="_____"
+        depth_string+="|_" + str(parents[current_node.d-i-1].action) + "_"
     depth_string+="|"
     print(string)
-    print(depth_string + " " + str(current_node.h))
+    global id
+    print(depth_string + " " + str(current_node.f) + " " + str(current_node.id) + " " + str(id))

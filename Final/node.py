@@ -1,8 +1,8 @@
 class Node:
     id = 0
     
-    def __init__(self, state=None, cost=0, action="", d=0, f=0,h=-5, parent=None):
-        self.id += 1
+    def __init__(self, id=0, state=None, cost=0, action="", d=0, f=0,h=-5, parent=None):
+        self.id = id
         self.state = state
         self.parent = parent
         self.cost = cost
