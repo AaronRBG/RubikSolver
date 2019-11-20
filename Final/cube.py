@@ -40,8 +40,6 @@ class Cube:
             self.turnRight(3) # 3:LEFT
         if (layer == length - 1):
             self.turnRight(4) # 4:RIGHT
-            self.turnRight(4)
-            self.turnRight(4)
 
         for i in range(length):
             aux[i] = self.faces[self.dict_faces[0]][i][layer]  # store the layer 0:BACK
@@ -75,8 +73,6 @@ class Cube:
             self.turnRight(0)	# 0:BACK
         if (layer == length - 1):
             self.turnRight(2)	# 2:FRONT
-            self.turnRight(2)
-            self.turnRight(2)
 
         for i in range(length):
             aux[i] = self.faces[self.dict_faces[4]][layer][i]	# 4:RIGHT
