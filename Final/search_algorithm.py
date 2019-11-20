@@ -67,7 +67,7 @@ def generateH(node):
             if counter[c] > 0.0:
                 entropy += counter[c]/(N*N) * math.log(counter[c]/(N*N),6)
 
-    entropy = round(-entropy,2)
+    entropy = -entropy
 
     return entropy
 
