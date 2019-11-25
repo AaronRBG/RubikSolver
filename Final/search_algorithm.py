@@ -14,7 +14,7 @@ def limited_search(Prob, strategy, max_depth):
     initial_node = Node(0, Prob.Initial_state, 0, "", 0, 0)
     id+=1
     fringe.insertNode(initial_node)
-    closed = []
+    closed = {}
     solution = False
     optimization = True
     cut = False
@@ -36,7 +36,7 @@ def limited_search(Prob, strategy, max_depth):
                 ls = Prob.successors(current_node.state)
                 ln = createListNodes(ls, current_node, max_depth, strategy) #Do createListNodes function
                 fringe.insertList(ln)
-                closed.append(current_node)
+                closed[current_node.state.id]=current_node.f
 
     if solution:
         return createSolution(current_node) #Do createSolution function
@@ -117,21 +117,15 @@ def createListNodes(ls, current_node, max_depth, strategy):
     return ln
 
 def nodeVisited(node, closed, optimization, strategy):
-    for n in closed:
-        res = areEqual(node,n,optimization, strategy)
-        if res:
-            return True
-    return False
-
-def areEqual(node1, node2, optimization, strategy):
-    if node1.state.id == node2.state.id:
+    if node.state.id in closed.keys():
         if optimization:
-            if strategy == 'DFS':
-                print(node1.d)
-                if node1.d >= node2.d:
+            if strategy == 'DFS' or strategy == 'LDS' or strategy == 'IDS':
+                if node.f <= closed[node.state.id]:
+                    closed[node.state.id] = node.f
                     return True
             else:    
-                if node1.f >= node2.f:
+                if node.f >= closed[node.state.id]:
+                    closed[node.state.id] = node.f
                     return True
         else:
             return True
