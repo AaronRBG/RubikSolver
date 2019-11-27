@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from problem import Problem
 from search_algorithm import limited_search, search
+import time
 
 filename_output = "solution.txt"
 
@@ -9,6 +10,7 @@ def writeFile(filename, text):
         outfile.write(text+"\n")
 
 print('--------- Introduce the type of algortihm: ---------')
+print('--------- Options: BFS, DFS, UCS, LDS, IDS, Greedy, A* ---------')
 algorithm = str(input())
 print('--------- Introduce the json filename of the Initial_state: ---------')
 filename_input = str(input())
@@ -19,9 +21,20 @@ if algorithm == "IDS":
 	inc_depth = int(input())
 else:
 	inc_depth = 0
+print('--------- Do you want to use visual effects? [Y/n] (may relate to longer times) ---------')
+string = str(input())
+if(string=='Y' or string=='y'):
+    visuals = True
+else:
+    visuals= False
+
+start_time = time.time()
+
 Prob = Problem(filename_input) #Clase Problem with InitialState and functions isGoal and sucessors
-sol = search(Prob, algorithm, depth, inc_depth)
+sol = search(Prob, algorithm, depth, inc_depth, visuals)
 if sol is not None:
+    print()
+    print("--- %s seconds ---" % (time.time() - start_time))
     print()
     print('############### The SOLUTION of the cube with movements is the next one: #################')
     for i in range(len(sol)-1,0,-1):

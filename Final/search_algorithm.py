@@ -8,7 +8,7 @@ import math
 
 id=0
 
-def limited_search(Prob, strategy, max_depth):
+def limited_search(Prob, strategy, max_depth, visuals):
     fringe = Frontier()
     global id
     initial_node = Node(0, Prob.Initial_state, 0, "", 0, 0)
@@ -18,7 +18,6 @@ def limited_search(Prob, strategy, max_depth):
     solution = False
     optimization = True
     cut = False
-    visuals = True
     while (solution is not True) and (fringe.isEmpty() is not True):
         current_node = fringe.removeNode()
         if visuals:
@@ -36,22 +35,23 @@ def limited_search(Prob, strategy, max_depth):
                 ls = Prob.successors(current_node.state)
                 ln = createListNodes(ls, current_node, max_depth, strategy) #Do createListNodes function
                 fringe.insertList(ln)
-                closed[current_node.state.id]=current_node.f
+                if not current_node.f == 0:
+                    closed[current_node.state.id]=current_node.f
 
     if solution:
         return createSolution(current_node) #Do createSolution function
     else:
         return None
 
-def search(Prob, strategy, max_depth, inc_depth):
+def search(Prob, strategy, max_depth, inc_depth, visuals):
     solution = None
     if strategy == 'IDS':
         current_depth = inc_depth
         while (not solution) and (current_depth <= max_depth):
-            solution = limited_search(Prob, strategy, current_depth)
+            solution = limited_search(Prob, strategy, current_depth, visuals)
             current_depth += inc_depth
     else:
-        solution = limited_search(Prob, strategy, max_depth)
+        solution = limited_search(Prob, strategy, max_depth, visuals)
     return solution
 
 def generateH(node):
