@@ -1,3 +1,4 @@
+
 #!/usr/bin/python
 from problem import Problem
 from search_algorithm import limited_search, search
@@ -21,6 +22,8 @@ if algorithm == "IDS":
 	inc_depth = int(input())
 else:
 	inc_depth = 0
+print('--------- What type of optimization do you want to use 0 | 1 | 2 ---------')
+optimization = int(input())
 print('--------- Do you want to use visual effects? [Y/n] (may relate to longer times) ---------')
 string = str(input())
 if(string=='Y' or string=='y'):
@@ -31,7 +34,7 @@ else:
 start_time = time.time()
 
 Prob = Problem(filename_input) #Clase Problem with InitialState and functions isGoal and sucessors
-sol = search(Prob, algorithm, depth, inc_depth, visuals)
+sol = search(Prob, algorithm, depth, inc_depth, visuals, optimization)
 if sol is not None:
     print()
     print("--- %s seconds ---" % (time.time() - start_time))

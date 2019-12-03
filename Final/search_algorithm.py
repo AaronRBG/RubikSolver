@@ -8,7 +8,7 @@ import math
 
 id=0
 
-def limited_search(Prob, strategy, max_depth, visuals):
+def limited_search(Prob, strategy, max_depth, visuals, optimization):
     fringe = Frontier()
     global id
     initial_node = Node(0, Prob.Initial_state, 0, "", 0, 0)
@@ -16,7 +16,6 @@ def limited_search(Prob, strategy, max_depth, visuals):
     fringe.insertNode(initial_node)
     closed = {}
     solution = False
-    optimization = True
     cut = False
     while (solution is not True) and (fringe.isEmpty() is not True):
         current_node = fringe.removeNode()
@@ -25,33 +24,44 @@ def limited_search(Prob, strategy, max_depth, visuals):
         if Prob.isGoal(current_node.state):
             solution = True
         else:
-            if optimization and nodeVisited(current_node, closed, optimization, strategy):
-                cut = True
-                if visuals:
+            if not optimization == 2:
+                cut = nodeVisited(current_node, closed, bool(optimization))
+                if cut and visuals:
                     print("CUT")
-            else:
-                cut = False
-            if not cut:
+                if not cut:
+                    ls = Prob.successors(current_node.state)
+                    ln = createListNodes(ls, current_node, max_depth, strategy) #Do createListNodes function
+                    fringe.insertList(ln)
+                    if bool(optimization):
+                        closed[current_node.state.id]=current_node.f
+
+            if optimization == 2:
                 ls = Prob.successors(current_node.state)
                 ln = createListNodes(ls, current_node, max_depth, strategy) #Do createListNodes function
-                fringe.insertList(ln)
-                if not current_node.f == 0:
-                    closed[current_node.state.id]=current_node.f
+                if ln is not None:
+                    for node in ln:
+                        if nodeVisited(node, closed, optimization):
+                            if visuals:
+                                print("CUT")
+                        else:
+                            fringe.insertNode(node)
+                            closed[node.state.id]=abs(node.f)
+
 
     if solution:
         return createSolution(current_node) #Do createSolution function
     else:
         return None
 
-def search(Prob, strategy, max_depth, inc_depth, visuals):
+def search(Prob, strategy, max_depth, inc_depth, visuals, optimization):
     solution = None
     if strategy == 'IDS':
         current_depth = inc_depth
         while (not solution) and (current_depth <= max_depth):
-            solution = limited_search(Prob, strategy, current_depth, visuals)
+            solution = limited_search(Prob, strategy, current_depth, visuals, optimization)
             current_depth += inc_depth
     else:
-        solution = limited_search(Prob, strategy, max_depth, visuals)
+        solution = limited_search(Prob, strategy, max_depth, visuals, optimization)
     return solution
 
 def generateH(node):
@@ -94,7 +104,7 @@ def createListNodes(ls, current_node, max_depth, strategy):
         ln[i].parent = current_node
         ln[i].d = d_current + 1
         if strategy == 'DFS' or strategy == 'LDS' or strategy == 'IDS':
-            ln[i].f = 1 / (ln[i].d + 1)
+            ln[i].f = - ln[i].d
 
         elif strategy == 'BFS':
             ln[i].f = ln[i].d
@@ -116,17 +126,13 @@ def createListNodes(ls, current_node, max_depth, strategy):
 
     return ln
 
-def nodeVisited(node, closed, optimization, strategy):
+def nodeVisited(node, closed, optimization):
     if node.state.id in closed.keys():
         if optimization:
-            if strategy == 'DFS' or strategy == 'LDS' or strategy == 'IDS':
-                if node.f <= closed[node.state.id]:
-                    closed[node.state.id] = node.f
-                    return True
-            else:    
-                if node.f >= closed[node.state.id]:
-                    closed[node.state.id] = node.f
-                    return True
+            if abs(node.f) >= abs(closed[node.state.id]):
+                return True
+            else:
+                closed[node.state.id] = node.f
         else:
             return True
     return False
