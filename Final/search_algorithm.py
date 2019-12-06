@@ -10,9 +10,10 @@ id=0
 
 def limited_search(Prob, strategy, max_depth, visuals, optimization):
     fringe = Frontier()
-    global id
-    initial_node = Node(0, Prob.Initial_state, 0, "", 0, 0)
-    id+=1
+    initial_node = Node(0, Prob.Initial_state, 0, "")
+    initial_heuristic = generateH(initial_node)
+    initial_node.f = initial_heuristic
+    initial_node.h = initial_heuristic
     fringe.insertNode(initial_node)
     closed = {}
     solution = False
@@ -32,7 +33,7 @@ def limited_search(Prob, strategy, max_depth, visuals, optimization):
                     ls = Prob.successors(current_node.state)
                     ln = createListNodes(ls, current_node, max_depth, strategy) #Do createListNodes function
                     fringe.insertList(ln)
-                    if bool(optimization):
+                    if optimization != 0:
                         closed[current_node.state.id]=current_node.f
 
             if optimization == 2:
@@ -40,12 +41,12 @@ def limited_search(Prob, strategy, max_depth, visuals, optimization):
                 ln = createListNodes(ls, current_node, max_depth, strategy) #Do createListNodes function
                 if ln is not None:
                     for node in ln:
-                        if nodeVisited(node, closed, optimization):
+                        if nodeVisited(node, closed, bool(optimization)):
                             if visuals:
                                 print("CUT")
                         else:
                             fringe.insertNode(node)
-                            closed[node.state.id]=abs(node.f)
+                            closed[node.state.id]=node.f
 
 
     if solution:
@@ -67,7 +68,9 @@ def search(Prob, strategy, max_depth, inc_depth, visuals, optimization):
 def generateH(node):
     N = len(node.state.faces["UP"][0])
     entropy = 0
+    face_entropy = 0
     for i in node.state.faces.values():
+        face_entropy = 0
         counter = [ 0 for i in range(6) ]
         for c in range(6):
             for j in i:
@@ -75,29 +78,28 @@ def generateH(node):
                     if k==c:
                         counter[c]+=1
             if counter[c] > 0.0:
-                entropy += counter[c]/(N*N) * math.log(counter[c]/(N*N),6)
-
-    entropy = -entropy
-
+                color_entropy = counter[c]/(N*N) * math.log(counter[c]/(N*N),6)
+                face_entropy += abs(color_entropy)
+        entropy += face_entropy
     return entropy
 
 def createListNodes(ls, current_node, max_depth, strategy):
     cost_current = current_node.cost
     d_current = current_node.d
     f_current = current_node.f
-
+    global id
     ln = []
     for i in range(len(ls)):
-        global id
         ln.append(Node())
 
     if d_current == max_depth:
         return None
 
     for i in range(len(ls)):
-        global id
+        #if current_node.parent is not None:
+        #    print(current_node.parent.id)
+        id+=1        
         ln[i].id = id
-        id+=1
         ln[i].action = ls[i][0]
         ln[i].state = ls[i][1]
         ln[i].cost = ls[i][2] + cost_current

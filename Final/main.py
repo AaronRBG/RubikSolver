@@ -10,8 +10,8 @@ def writeFile(filename, text):
     with open(filename, 'a') as outfile:
         outfile.write(text+"\n")
 
-print('--------- Introduce the type of algortihm: ---------')
-print('--------- Options: BFS, DFS, UCS, LDS, IDS, Greedy, A* ---------')
+print('----------- Introduce the type of algortihm: -----------')
+print('##### Options: BFS, DFS, UCS, LDS, IDS, Greedy, A* #####')
 algorithm = str(input())
 print('--------- Introduce the json filename of the Initial_state: ---------')
 filename_input = str(input())
@@ -42,9 +42,12 @@ if sol is not None:
     print('############### The SOLUTION of the cube with movements is the next one: #################')
     for i in range(len(sol)-1,0,-1):
         string = ""
-        string = "[" + str(sol[i-1].id) + "](" + str(sol[i-1].action) + "]" + str(sol[i-1].state.id) + ",c=" + str(sol[i-1].cost) + ",d=" + str(sol[i-1].d) + ",h=" + str(sol[i-1].h) + ",f=" + str(sol[i-1].f)
+        string = "[" + str(sol[i-1].id) + "]([" + str(sol[i-1].action) + "]" + str(sol[i-1].state.id) + ",c=" + str(sol[i-1].cost) + ",d=" + str(sol[i-1].d) + ",h=" + str(sol[i-1].h) + ",f=" + str(sol[i-1].f)+")"
         print(string)
-        writeFile(filename_output, sol[i-1].action)
+        if i == len(sol) - 1:
+            writeFile(filename_output, "Initial state")
+        else:
+            writeFile(filename_output, "Movement: "+sol[i-1].action)
         writeFile(filename_output, str(sol[i-1].state.faces))
 else:
     print('############### No solution was found #################')
