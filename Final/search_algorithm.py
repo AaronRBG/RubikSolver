@@ -5,6 +5,7 @@ from cube import Cube
 import json
 from time import time
 import math
+import sys
 
 id=0
 
@@ -50,6 +51,8 @@ def limited_search(Prob, strategy, max_depth, visuals, optimization):
 
 
     if solution:
+        print("========== Number of created nodes: ", id-1," =============================")
+        print("========== Memoria utilizada: ", sys.getsizeof(Node())*(id-1)/float(1024), " MB ===========================")
         return createSolution(current_node) #Do createSolution function
     else:
         return None
